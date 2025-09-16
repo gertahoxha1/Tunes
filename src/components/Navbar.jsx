@@ -28,9 +28,9 @@ const Navbar = () => {
           </div>
         </div>
         <div className="flex items-center space-x-4">
-          <button className="p-2 text-gray-600 hover:text-red-600 transition">
+          <Link to="/cartpage" className="p-2 text-gray-600 hover:text-red-600 transition">
             Shopping Cart
-          </button>
+          </Link>
           <Link to="/login" className="p-2 text-gray-600 hover:text-red-600 transition">
           Log in
           </Link>

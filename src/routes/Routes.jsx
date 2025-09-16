@@ -1,7 +1,8 @@
 import { Navigate } from "react-router-dom";
 
 import Guitars from "../components/pages/Guitars";
-import Cart from "../components/pages/Cart";
+import CartSidebar from "../components/pages/CartSidebar";
+import CartPage from "../components/pages/CartPage";
 import GuitarDetail from "../components/pages/GuitarDetail";
 import HeroSection from "../components/HeroSection";
 import FeaturedProducts from "../components/FeaturedProducts";
@@ -15,7 +16,7 @@ export const routes = [
     element: [
       <HeroSection />,
       <FeaturedProducts />,
-      <Newsletter />,
+      <Newsletter />, 
       <Footer />,
     ],
   },
@@ -37,9 +38,13 @@ export const routes = [
     element: <Signup />,
   },
   {
-      path: "/cart",
-    element: <Cart/>,
+      path: "/cartsidebar",
+    element: <CartSidebar/>,
   }, 
+    {
+      path: "/cartpage",
+    element: <CartPage/>,
+  },
    {
     path: "*",
     element: <Navigate to="/" replace />,

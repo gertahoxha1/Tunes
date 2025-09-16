@@ -7,7 +7,6 @@ export default function App() {
     <Router>
       <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white font-sans">
         <Navbar />
-         
         <Routes>
           {routes.map(({ path, element }, index) => (
             <Route key={index} path={path} element={element} />
