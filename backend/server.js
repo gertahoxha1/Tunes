@@ -1,67 +1,50 @@
 const express = require("express");
+const mongoose = require("mongoose");
 const cors = require("cors");
-const mysql = require("mysql2");
-const bodyParser = require("body-parser");
 
 const app = express();
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-//lidhja me databaze
-const db = mysql.createConnection({
-  host: "localhost",
-  user: "root",
-  password: "Hoxhagerta14",
-  database: "guitar_store",
+// Connect to MongoDB (local or Atlas)
+mongoose.connect("mongodb://127.0.0.1:27017/tunes", {
+  useNewUrlParser: true,
+  useUnifiedTopology: true,
 });
 
-db.connect((err) => {
-  if (err) throw err;
-  console.log("MySQL is connected...");
+// Schema
+const cartSchema = new mongoose.Schema({
+  guitarId: Number,
+  name: String,
+  price: String,
+  image: String,
+  quantity: { type: Number, default: 1 },
 });
 
-// Create
-app.post("/guitars", (req, res) => {
-  const { name, model, price, image_url } = req.body;
-  db.query(
-    "INSERT INTO guitars (name, model, price, image_url) VALUES (?, ?, ?, ?)",
-    [name, model, price, image_url],
-    (err, result) => {
-      if (err) return res.status(500).send(err);
-      res.send({ message: "Guitar is added", id: result.insertId });
-    }
-  );
+const Cart = mongoose.model("Cart", cartSchema);
+
+// Routes
+app.get("/cart", async (req, res) => {
+  const items = await Cart.find();
+  res.json(items);
 });
 
-// Read
-app.get("/guitars", (req, res) => {
-  db.query("SELECT * FROM guitars", (err, results) => {
-    if (err) return res.status(500).send(err);
-    res.send(results);
-  });
+app.post("/cart", async (req, res) => {
+  const { guitarId, name, price, image } = req.body;
+  let existing = await Cart.findOne({ guitarId });
+  if (existing) {
+    existing.quantity += 1;
+    await existing.save();
+    return res.json(existing);
+  }
+  const newItem = new Cart({ guitarId, name, price, image, quantity: 1 });
+  await newItem.save();
+  res.json(newItem);
 });
 
-// Update
-app.put("/guitars/:id", (req, res) => {
-  const { id } = req.params;
-  const { name, model, price, image_url } = req.body;
-  db.query(
-    "UPDATE guitars SET name=?, model=?, price=?, image_url=? WHERE id=?",
-    [name, model, price, image_url, id],
-    (err) => {
-      if (err) return res.status(500).send(err);
-      res.send({ message: "Guitar is updated" });
-    }
-  );
+app.delete("/cart/:id", async (req, res) => {
+  await Cart.findByIdAndDelete(req.params.id);
+  res.json({ success: true });
 });
 
-// Delete
-app.delete("/guitars/:id", (req, res) => {
-  const { id } = req.params;
-  db.query("DELETE FROM guitars WHERE id=?", [id], (err) => {
-    if (err) return res.status(500).send(err);
-    res.send({ message: "Guitar is deleted" });
-  });
-});
-
-app.listen(5000, () => console.log(`Server is running on port 5000`));
+app.listen(5000, () => console.log("Server running at http://localhost:5000"));

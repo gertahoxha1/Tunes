@@ -2,15 +2,13 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { guitars } from "../data";
 
-const AcousticGuitars = () => {
-  const acousticGuitars = guitars.filter((g) => g.type === "Acoustic");
-
+const Guitars = () => {
   return (
     <section className="bg-gray-50 py-10 px-6">
       <div className="max-w-7xl mx-auto">
-        <h2 className="text-3xl font-bold mb-8">Acoustic Guitars</h2>
+        <h2 className="text-3xl font-bold mb-8">All Guitars</h2>
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
-          {acousticGuitars.map((guitar) => (
+          {guitars.map((guitar) => (
             <Link
               key={guitar.id}
               to={`/guitars/${guitar.id}`}
@@ -47,4 +45,4 @@ const AcousticGuitars = () => {
   );
 };
 
-export default AcousticGuitars;
+export default Guitars;

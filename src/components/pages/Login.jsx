@@ -27,7 +27,7 @@ const Login = () => {
       <div className="bg-white/95 p-8 rounded-3xl shadow-xl w-full max-w-md backdrop-blur-md">
         <div className="flex items-center justify-center mb-6">
           <GiGuitarHead className="text-red-500 text-4xl mr-2" />
-          <h2 className="text-3xl font-bold text-gray-800">Jamify Log in</h2>
+          <h2 className="text-3xl font-bold text-gray-800">Tunes Log in</h2>
         </div>
 
         {error && (

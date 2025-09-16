@@ -12,11 +12,10 @@ import {
   FaInstagram,
   FaYoutube,
 } from "react-icons/fa";
+import {Link} from "react-router-dom";
+
 
 const HeroSection = () => {
-  const [selectedColor, setSelectedColor] = useState("white");
-  const colors = ["bg-orange-800", "bg-amber-100", "bg-red-800", "bg-blue-800"];
-
   return (
     <section className="relative overflow-hidden">
       <div className="max-w-7xl mx-auto px-6 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between">
@@ -34,36 +33,15 @@ const HeroSection = () => {
 
           <div className="flex space-x-4 pt-2">
             <button className="bg-red-600 text-white px-8 py-3 rounded-md text-lg font-semibold hover:bg-red-700 transition-all transform hover:scale-105 shadow-lg hover:shadow-red-200">
+              <Link to="/guitars">
               Shop Now
+              </Link>
             </button>
             <button className="border border-gray-300 text-gray-700 px-8 py-3 rounded-md text-lg font-semibold hover:bg-gray-100 transition-all transform hover:scale-105">
               Learn More
             </button>
           </div>
 
-          <div className="flex space-x-2 pt-8">
-            <span className="w-8 h-[2px] bg-red-600"></span>
-            <span className="w-8 h-[2px] bg-gray-300 hover:bg-gray-400 cursor-pointer"></span>
-            <span className="w-8 h-[2px] bg-gray-300 hover:bg-gray-400 cursor-pointer"></span>
-          </div>
-
-          {/* Colors */}
-          <div className="pt-8">
-            <p className="text-sm text-gray-500 mb-2">AVAILABLE COLORS</p>
-            <div className="flex space-x-3">
-              {colors.map((color, idx) => (
-                <div
-                  key={idx}
-                  className={`color-option w-8 h-8 rounded-full cursor-pointer border-2 ${
-                    selectedColor === color
-                      ? "border-red-600"
-                      : "border-transparent"
-                  } ${color}`}
-                  onClick={() => setSelectedColor(color)}
-                ></div>
-              ))}
-            </div>
-          </div>
         </div>
 
         {/* Right */}
@@ -75,13 +53,6 @@ const HeroSection = () => {
           />
 
           {/* Feature Labels */}
-          <div className="absolute top-[15%] left-[60%] feature-label">
-            <div className="flex items-center space-x-2 bg-white px-3 py-1 rounded-full shadow-sm">
-              <span className="text-xs font-medium text-gray-700">
-                4 Colors Available
-              </span>
-            </div>
-          </div>
 
           <div className="absolute top-[35%] left-[70%] feature-label">
             <div className="flex items-center space-x-2 bg-white px-3 py-1 rounded-full shadow-sm">

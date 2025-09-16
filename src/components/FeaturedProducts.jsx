@@ -44,7 +44,7 @@ const FeaturedProducts = () => (
   <section className="py-16 bg-gray-50">
     <div className="max-w-7xl mx-auto px-6">
       <h2 className="text-3xl font-bold text-gray-900 mb-12 text-center">
-        Explore The Collection
+        Our Collection
       </h2>
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
         {products.map((p, idx) => (
@@ -62,9 +62,6 @@ const FeaturedProducts = () => (
                 <span className="text-lg font-bold text-gray-900 ">
                   {p.price}
                 </span>
-                <button className="text-red-600 hover:text-red-800">
-                  <FaPlusCircle className="text-xl" />
-                </button>
               </div>
             </div>
           </div>
