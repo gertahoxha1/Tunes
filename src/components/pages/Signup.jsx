@@ -32,7 +32,7 @@ const Signup = () => {
     setLoading(true);
 
     try {
-      const res = await axios.post("http://localhost:5000/signup", {
+      const res = await axios.post("http://localhost:5000/users/signup", {
         name,
         email,
         password,
@@ -50,7 +50,6 @@ const Signup = () => {
       }).then(() => {
         navigate("/login");
       });
-
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed. Try again.");
     } finally {

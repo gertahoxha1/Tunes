@@ -16,7 +16,17 @@ const CartSchema = new mongoose.Schema({
   quantity: { type: Number, default: 1 },
 });
 
-const UserModel = mongoose.model("User", UserSchema);
-const CartModel = mongoose.model("Cart", CartSchema);
+const GuitarSchema = new mongoose.Schema({
+  id: { type: Number, required: true, unique: true },
+  name: { type: String, required: true },
+  type: { type: String, required: true },
+  price: { type: String, required: true },
+  image: { type: String, required: true },
+});
 
-module.exports = { UserModel, CartModel };
+const UserModel = require("../../domain/User"); 
+const CartModel = require("../../domain/Cart");
+const GuitarModel = require("../../domain/Guitar");
+
+
+module.exports = { UserModel, CartModel, GuitarModel };

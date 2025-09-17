@@ -1,3 +1,4 @@
+// infrastructure/repositories/GuitarRepository.js
 const { GuitarModel } = require("../database");
 
 class GuitarRepository {
@@ -6,7 +7,8 @@ class GuitarRepository {
   }
 
   async findById(id) {
-    return await GuitarModel.findById(id);
+    return await GuitarModel.findOne({ id: Number(id) });
   }
 }
+
 module.exports = GuitarRepository;

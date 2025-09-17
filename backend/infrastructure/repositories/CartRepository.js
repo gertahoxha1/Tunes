@@ -1,3 +1,4 @@
+// infrastructure/repositories/CartRepository.js
 const { CartModel } = require("../database");
 
 class CartRepository {
@@ -12,5 +13,13 @@ class CartRepository {
       { upsert: true, new: true }
     );
   }
+
+  async removeItem(userId, guitarId) {
+    return await CartModel.updateOne(
+      { userId },
+      { $pull: { items: { guitarId } } }
+    );
+  }
 }
+
 module.exports = CartRepository;

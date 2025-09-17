@@ -1,4 +1,4 @@
-import React, { useState } from "react"; 
+import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import Swal from "sweetalert2";
@@ -20,7 +20,10 @@ export default function Login() {
     }
 
     try {
-      const res = await axios.post("http://localhost:5000/login", { email, password });
+      const res = await axios.post("http://localhost:5000/users/login", {
+        email,
+        password,
+      });
 
       // store user with token
       const userWithToken = { ...res.data.user, token: res.data.token };
@@ -35,7 +38,6 @@ export default function Login() {
       }).then(() => {
         navigate("/"); // go home after user clicks OK
       });
-
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
     }

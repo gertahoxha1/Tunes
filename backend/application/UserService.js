@@ -10,7 +10,12 @@ class UserService {
     if (existing) throw new Error("Email already exists");
 
     const user = await this.userRepository.create({ name, email, password });
-    const token = this.jwt.sign({ id: user._id }, process.env.JWT_SECRET || "secret123", { expiresIn: "1d" });
+    const token = this.jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET, // ✅ always from .env
+      { expiresIn: "1d" }
+    );
+
     return { user: { name: user.name, email: user.email }, token };
   }
 
@@ -21,7 +26,12 @@ class UserService {
     const match = await user.comparePassword(password);
     if (!match) throw new Error("Invalid email or password");
 
-    const token = this.jwt.sign({ id: user._id }, process.env.JWT_SECRET || "secret123", { expiresIn: "1d" });
+    const token = this.jwt.sign(
+      { id: user._id },
+      process.env.JWT_SECRET, // ✅ always from .env
+      { expiresIn: "1d" }
+    );
+
     return { user: { name: user.name, email: user.email }, token };
   }
 }
