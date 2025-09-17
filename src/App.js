@@ -11,6 +11,7 @@ export default function App() {
           {routes.map(({ path, element }, index) => (
             <Route key={index} path={path} element={element} />
           ))}
+          
         </Routes>
       </div>
     </Router>

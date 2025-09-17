@@ -5,11 +5,16 @@ import { Link } from "react-router-dom";
 export default function CartSidebar() {
   const [cart, setCart] = useState([]);
 
-  useEffect(() => { fetchCart(); }, []);
+  useEffect(() => {
+    fetchCart();
+  }, []);
 
   const fetchCart = async () => {
     try {
-      const token = localStorage.getItem("token");
+      const savedUser = JSON.parse(localStorage.getItem("user"));
+      const token = savedUser?.token;
+      if (!token) return;
+
       const res = await axios.get("http://localhost:5000/cartpage", {
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -20,11 +25,18 @@ export default function CartSidebar() {
   };
 
   const removeFromCart = async (id) => {
-    const token = localStorage.getItem("token");
-    await axios.delete(`http://localhost:5000/cartpage/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    fetchCart();
+    try {
+      const savedUser = JSON.parse(localStorage.getItem("user"));
+      const token = savedUser?.token;
+      if (!token) return;
+
+      await axios.delete(`http://localhost:5000/cartpage/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      fetchCart();
+    } catch (err) {
+      console.error("Failed to remove item:", err);
+    }
   };
 
   return (
@@ -32,20 +44,32 @@ export default function CartSidebar() {
       <h2 className="text-xl font-bold mb-4">Shopping Cart</h2>
       {cart.length === 0 && <p>Your cart is empty.</p>}
       {cart.map((item) => (
-        <div key={item._id} className="flex items-center justify-between bg-white p-2 mb-2 rounded shadow">
+        <div
+          key={item._id}
+          className="flex items-center justify-between bg-white p-2 mb-2 rounded shadow"
+        >
           <img src={item.image} alt={item.name} className="w-16 h-16" />
           <div className="flex-1 ml-2">
             <h3>{item.name}</h3>
             <p>{item.price}</p>
             <p className="text-sm">Qty: {item.quantity}</p>
           </div>
-          <button onClick={() => removeFromCart(item._id)} className="bg-red-500 text-white px-2 py-1 rounded">X</button>
+          <button
+            onClick={() => removeFromCart(item._id)}
+            className="bg-red-500 text-white px-2 py-1 rounded"
+          >
+            X
+          </button>
         </div>
       ))}
       {cart.length > 0 && (
-        <Link to="/cartpage" className="block mt-4 bg-blue-500 text-white py-2 text-center rounded">Go to Cart Page</Link>
+        <Link
+          to="/cartpage"
+          className="block mt-4 bg-blue-500 text-white py-2 text-center rounded"
+        >
+          Go to Cart Page
+        </Link>
       )}
     </div>
   );
 }
-

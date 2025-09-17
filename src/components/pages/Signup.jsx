@@ -3,6 +3,7 @@ import { GiGuitarHead } from "react-icons/gi";
 import { FaGoogle, FaFacebook, FaEnvelope } from "react-icons/fa";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Swal from "sweetalert2";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -37,11 +38,19 @@ const Signup = () => {
         password,
       });
 
-      // Save token in localStorage
-      localStorage.setItem("token", res.data.token);
+      const userWithToken = { ...res.data.user, token: res.data.token };
+      localStorage.setItem("user", JSON.stringify(userWithToken));
 
-      // Redirect to login or home
-      navigate("/login");
+      // ✅ SweetAlert on success
+      Swal.fire({
+        title: "Signup Successful!",
+        text: `Welcome to Jamify, ${res.data.user.name}! 🎸`,
+        icon: "success",
+        confirmButtonText: "Log in now",
+      }).then(() => {
+        navigate("/login");
+      });
+
     } catch (err) {
       setError(err.response?.data?.error || "Signup failed. Try again.");
     } finally {
@@ -134,9 +143,3 @@ const Signup = () => {
 };
 
 export default Signup;
-
-
-
-
-
-

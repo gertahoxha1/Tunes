@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useState } from "react"; 
 import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import Swal from "sweetalert2";
 import { GiGuitarHead } from "react-icons/gi";
 
 export default function Login() {
@@ -21,11 +22,20 @@ export default function Login() {
     try {
       const res = await axios.post("http://localhost:5000/login", { email, password });
 
-      // Expecting res.data = { user: {...}, token: "..." }
-      localStorage.setItem("token", res.data.token);
-      localStorage.setItem("user", JSON.stringify(res.data.user));
+      // store user with token
+      const userWithToken = { ...res.data.user, token: res.data.token };
+      localStorage.setItem("user", JSON.stringify(userWithToken));
 
-      navigate("/"); // go to home or dashboard
+      // ✅ SweetAlert on success
+      Swal.fire({
+        title: "Login Successful!",
+        text: `Welcome back, ${res.data.user.name}!`,
+        icon: "success",
+        confirmButtonText: "Continue",
+      }).then(() => {
+        navigate("/"); // go home after user clicks OK
+      });
+
     } catch (err) {
       setError(err.response?.data?.error || "Login failed");
     }
@@ -39,7 +49,11 @@ export default function Login() {
           <h1 className="text-2xl font-bold">Tunes · Log in</h1>
         </div>
 
-        {error && <div className="mb-4 text-red-600 bg-red-100 p-3 rounded">{error}</div>}
+        {error && (
+          <div className="mb-4 text-red-600 bg-red-100 p-3 rounded">
+            {error}
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
@@ -58,7 +72,10 @@ export default function Login() {
             className="w-full px-4 py-3 border rounded-lg focus:outline-none"
             required
           />
-          <button type="submit" className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600">
+          <button
+            type="submit"
+            className="w-full bg-red-500 text-white py-3 rounded-lg hover:bg-red-600"
+          >
             Log in
           </button>
         </form>
@@ -73,5 +90,3 @@ export default function Login() {
     </div>
   );
 }
-
-
