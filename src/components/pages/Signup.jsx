@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { GiGuitarHead } from "react-icons/gi";
 import { FaGoogle, FaFacebook, FaEnvelope } from "react-icons/fa";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
 const Signup = () => {
   const [name, setName] = useState("");
@@ -8,8 +10,11 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const handleSubmit = (e) => {
+  const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
     if (!email.includes("@") || password.length < 6) {
@@ -23,8 +28,25 @@ const Signup = () => {
     }
 
     setError("");
-    console.log("Signing up with:", { name, email, password });
-    
+    setLoading(true);
+
+    try {
+      const res = await axios.post("http://localhost:5000/signup", {
+        name,
+        email,
+        password,
+      });
+
+      // Save token in localStorage
+      localStorage.setItem("token", res.data.token);
+
+      // Redirect to login or home
+      navigate("/login");
+    } catch (err) {
+      setError(err.response?.data?.error || "Signup failed. Try again.");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -35,7 +57,7 @@ const Signup = () => {
       <div className="bg-white/95 p-8 rounded-3xl shadow-xl w-full max-w-md backdrop-blur-md">
         <div className="flex items-center justify-center mb-6">
           <GiGuitarHead className="text-red-500 text-4xl mr-2" />
-          <h2 className="text-3xl font-bold text-gray-800">Tunes Sign Up</h2>
+          <h2 className="text-3xl font-bold text-gray-800">Jamify Sign Up</h2>
         </div>
 
         {error && (
@@ -44,7 +66,7 @@ const Signup = () => {
           </div>
         )}
 
-        {/* Continue with buttons */}
+        {/* Continue with buttons (UI only for now) */}
         <div className="space-y-3">
           <button className="w-full flex items-center justify-center gap-2 border py-3 rounded-xl hover:bg-gray-100 transition">
             <FaGoogle className="text-red-500" /> Continue with Google
@@ -93,15 +115,16 @@ const Signup = () => {
           />
           <button
             type="submit"
+            disabled={loading}
             className="w-full bg-red-500 text-white py-3 rounded-xl hover:bg-red-600 transition font-semibold shadow-md"
           >
-            Sign Up
+            {loading ? "Signing up..." : "Sign Up"}
           </button>
         </form>
 
         <p className="text-center text-sm text-gray-600 mt-4">
           Already have an account?{" "}
-          <a href="/Login" className="text-red-500 font-medium">
+          <a href="/login" className="text-red-500 font-medium">
             Log In
           </a>
         </p>
@@ -111,4 +134,9 @@ const Signup = () => {
 };
 
 export default Signup;
+
+
+
+
+
 

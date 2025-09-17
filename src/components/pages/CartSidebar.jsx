@@ -5,13 +5,14 @@ import { Link } from "react-router-dom";
 export default function CartSidebar() {
   const [cart, setCart] = useState([]);
 
-  useEffect(() => {
-    fetchCart();
-  }, []);
+  useEffect(() => { fetchCart(); }, []);
 
   const fetchCart = async () => {
     try {
-      const res = await axios.get("http://localhost:5000/cartpage");
+      const token = localStorage.getItem("token");
+      const res = await axios.get("http://localhost:5000/cartpage", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       setCart(res.data);
     } catch (err) {
       console.error("Failed to fetch cart:", err);
@@ -19,41 +20,32 @@ export default function CartSidebar() {
   };
 
   const removeFromCart = async (id) => {
-    try {
-      await axios.delete(`http://localhost:5000/cartpage/${id}`);
-      fetchCart();
-    } catch (err) {
-      console.error("Failed to remove item:", err);
-    }
+    const token = localStorage.getItem("token");
+    await axios.delete(`http://localhost:5000/cartpage/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    fetchCart();
   };
 
   return (
     <div className="fixed right-0 top-0 h-full w-80 bg-gray-100 shadow-lg p-4 overflow-y-auto">
       <h2 className="text-xl font-bold mb-4">Shopping Cart</h2>
       {cart.length === 0 && <p>Your cart is empty.</p>}
-      <ul className="space-y-4">
-        {cart.map((item) => (
-          <li key={item._id} className="flex items-center justify-between bg-white p-2 rounded shadow">
-            <img src={item.image} alt={item.name} className="w-16 h-16 object-contain" />
-            <div className="flex-1 ml-2">
-              <h3 className="font-semibold">{item.name}</h3>
-              <p>{item.price}</p>
-              <p className="text-sm text-gray-500">Qty: {item.quantity}</p>
-            </div>
-            <button 
-              onClick={() => removeFromCart(item._id)}
-              className="bg-red-500 text-white px-2 py-1 rounded hover:bg-red-600"
-            >
-              X
-            </button>
-          </li>
-        ))}
-      </ul>
+      {cart.map((item) => (
+        <div key={item._id} className="flex items-center justify-between bg-white p-2 mb-2 rounded shadow">
+          <img src={item.image} alt={item.name} className="w-16 h-16" />
+          <div className="flex-1 ml-2">
+            <h3>{item.name}</h3>
+            <p>{item.price}</p>
+            <p className="text-sm">Qty: {item.quantity}</p>
+          </div>
+          <button onClick={() => removeFromCart(item._id)} className="bg-red-500 text-white px-2 py-1 rounded">X</button>
+        </div>
+      ))}
       {cart.length > 0 && (
-        <Link to="/cartpage" className="block mt-4 bg-blue-500 text-white py-2 text-center rounded hover:bg-blue-600">
-          Go to Cart Page
-        </Link>
+        <Link to="/cartpage" className="block mt-4 bg-blue-500 text-white py-2 text-center rounded">Go to Cart Page</Link>
       )}
     </div>
   );
 }
+
