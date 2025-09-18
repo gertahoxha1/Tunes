@@ -15,7 +15,7 @@ export default function CartSidebar() {
       const token = savedUser?.token;
       if (!token) return;
 
-      const res = await axios.get("http://localhost:5000/cartpage", {
+      const res = await axios.get("http://localhost:5000/cart", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setCart(res.data);
@@ -30,7 +30,7 @@ export default function CartSidebar() {
       const token = savedUser?.token;
       if (!token) return;
 
-      await axios.delete(`http://localhost:5000/cartpage/${id}`, {
+      await axios.delete(`http://localhost:5000/cart/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       fetchCart();

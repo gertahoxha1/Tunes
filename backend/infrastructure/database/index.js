@@ -7,13 +7,15 @@ const UserSchema = new mongoose.Schema({
   password: String,
 });
 
+// infrastructure/database/index.js
 const CartSchema = new mongoose.Schema({
-  userId: String,
-  guitarId: Number,
-  name: String,
-  price: String,
-  image: String,
-  quantity: { type: Number, default: 1 },
+  userId: { type: String, required: true, unique: true },
+  items: [
+    {
+      guitarId: { type: Number, required: true },
+      quantity: { type: Number, default: 1 },
+    },
+  ],
 });
 
 const GuitarSchema = new mongoose.Schema({
@@ -24,9 +26,8 @@ const GuitarSchema = new mongoose.Schema({
   image: { type: String, required: true },
 });
 
-const UserModel = require("../../domain/User"); 
+const UserModel = require("../../domain/User");
 const CartModel = require("../../domain/Cart");
 const GuitarModel = require("../../domain/Guitar");
-
 
 module.exports = { UserModel, CartModel, GuitarModel };

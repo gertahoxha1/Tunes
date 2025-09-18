@@ -41,7 +41,6 @@ const Signup = () => {
       const userWithToken = { ...res.data.user, token: res.data.token };
       localStorage.setItem("user", JSON.stringify(userWithToken));
 
-      // ✅ SweetAlert on success
       Swal.fire({
         title: "Signup Successful!",
         text: `Welcome to Jamify, ${res.data.user.name}! 🎸`,
@@ -74,22 +73,10 @@ const Signup = () => {
           </div>
         )}
 
-        {/* Continue with buttons (UI only for now) */}
-        <div className="space-y-3">
-          <button className="w-full flex items-center justify-center gap-2 border py-3 rounded-xl hover:bg-gray-100 transition">
-            <FaGoogle className="text-red-500" /> Continue with Google
-          </button>
-          <button className="w-full flex items-center justify-center gap-2 border py-3 rounded-xl hover:bg-gray-100 transition">
-            <FaFacebook className="text-blue-600" /> Continue with Facebook
-          </button>
-          <button className="w-full flex items-center justify-center gap-2 border py-3 rounded-xl hover:bg-gray-100 transition">
-            <FaEnvelope className="text-gray-700" /> Continue with Email
-          </button>
-        </div>
-
         {/* Signup form */}
         <form onSubmit={handleSubmit} className="space-y-4 mt-4">
           <input
+            name="name" // 👈 added for Selenium
             type="text"
             placeholder="Name"
             value={name}
@@ -98,6 +85,7 @@ const Signup = () => {
             required
           />
           <input
+            name="email" // 👈 added for Selenium
             type="email"
             placeholder="Email"
             value={email}
@@ -106,6 +94,7 @@ const Signup = () => {
             required
           />
           <input
+            name="password" // 👈 added for Selenium
             type="password"
             placeholder="Password"
             value={password}
@@ -114,6 +103,7 @@ const Signup = () => {
             required
           />
           <input
+            name="confirmPassword" // 👈 added for Selenium
             type="password"
             placeholder="Confirm Password"
             value={confirmPassword}

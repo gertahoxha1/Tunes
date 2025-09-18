@@ -16,22 +16,39 @@ export default function GuitarDetail() {
   const addToCart = async () => {
     const savedUser = JSON.parse(localStorage.getItem("user"));
     if (!savedUser?.token) {
-      Swal.fire("Login Required", "You must be logged in to add items.", "warning");
+      Swal.fire(
+        "Login Required",
+        "You must be logged in to add items.",
+        "warning"
+      );
       return;
     }
 
     try {
       await axios.post(
         "http://localhost:5000/cart/add",
-        { guitarId: guitar.id, quantity: 1 },
-        { headers: { Authorization: `Bearer ${savedUser.token}` } }
+        {
+          guitarId: guitar.id,
+          name: guitar.name,
+          type: guitar.type,
+          price: guitar.price,
+          image: guitar.image, // 👈 make sure your guitar object has this
+          quantity: 1,
+        },
+        {
+          headers: { Authorization: `Bearer ${savedUser.token}` },
+        }
       );
 
       Swal.fire("Added!", `${guitar.name} added to your cart.`, "success").then(
         () => navigate("/cartpage")
       );
     } catch (error) {
-      Swal.fire("Error", error.response?.data?.error || "Failed to add to cart.", "error");
+      Swal.fire(
+        "Error",
+        error.response?.data?.error || "Failed to add to cart.",
+        "error"
+      );
     }
   };
 

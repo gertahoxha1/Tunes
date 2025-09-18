@@ -59,6 +59,7 @@ export default function Login() {
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <input
+            name="email" // 👈 added for Selenium
             type="email"
             placeholder="Email"
             value={email}
@@ -67,6 +68,7 @@ export default function Login() {
             required
           />
           <input
+            name="password" // 👈 added for Selenium
             type="password"
             placeholder="Password"
             value={password}
